@@ -1,0 +1,45 @@
+[extension_name]
+SAMMI Companion
+[extension_info]
+Powerful Hybrid Application, a nice companion for SAMMI
+[extension_version]
+{{ version }}
+[insert_external]
+<div>
+{{ html }}
+</div>
+[insert_command]
+main();
+[insert_hook]
+//Deprecated
+[insert_script]
+function main() {
+    console.log("Loading SAMMI Companion Extension");
+
+    
+    // SAMMI.alert('Example Extension is ready and listening.');
+
+    // Set up a listener for an extension command you created earlier
+    // This will run when user presses the button that triggers the command in SAMMI
+    sammiclient.on('TTS', (payload) => {
+        console.log("Command triggered", payload);
+        // get the button ID from the payload which SAMMI sent to the extension
+        const { FromButton }  = payload.Data 
+        // Get the value of the example extension box from the payload we set up earlier
+        const exampleBoxValue = payload.Data.exampleBox
+        // Here we can do something with the value, like append some text to it and send it back to SAMMI
+        const exampleBoxValueModified = exampleBoxValue + " - Modified";
+        // Send the modified value back to SAMMI by setting the variable value in the button that triggered the command
+        SAMMI.setVariable('exampleVariable', exampleBoxValueModified, FromButton)
+        // We can also ask SAMMI to return the value of a variable from a button
+        SAMMI.getVariable('exampleVariable', FromButton).then((data) => {
+            console.log("Variable value returned from SAMMI", data.Value);
+        });
+    });
+
+// Define more scripts and functions here
+}
+[insert_over]
+{ 
+    "sammi_version": "2023.3.0"
+}
