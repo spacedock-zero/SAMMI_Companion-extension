@@ -25,10 +25,26 @@ jobs:
         env:
           VERSION: ${{ github.event.inputs.action_ref }}
         shell: bash
+        #LLM, check later
         run: |
-          BUILT_HTML=$(cat dist/index.html)
-          sed -i "s/{{ version }}/${VERSION}/g" sammi-companion.sef
-          sed -i "s|{{ html }}|${BUILT_HTML}|g" sammi-companion.sef
+          [ -f dist/index.html ] || { echo "Error: dist/index.html not found."; exit 1; }
+          [ -s dist/index.html ] || { echo "Error: dist/index.html is empty."; exit 1; }
+          awk -v version="${VERSION}" -v html="$(<dist/index.html)" '
+            BEGIN { html_replaced = 0 }
+            /{{ version }}/ { gsub(/{{ version }}/, version) }
+            /{{ html }}/ {
+              print html
+              html_replaced = 1
+              next
+            }
+            { print }
+            END {
+              if (!html_replaced) {
+                print "Error: {{ html }} placeholder not found." > "/dev/stderr"
+                exit 1
+              }
+            }
+          ' sammi-companion.sef > sammi-companion.sef.tmp && mv sammi-companion.sef.tmp sammi-companion.sef
       - name: Create draft release
         id: create_release
         uses: actions/create-release@v1
@@ -41,5 +57,14 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: sammi-companion.sef
+          asset_name: sammi-companion.sef
+          asset_content_type: application/octet-stream
+          release_name: "Release ${{ github.event.inputs.action_ref }}"
+          draft: true
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: sammi-companion.built.sef
           asset_name: sammi-companion.sef
           asset_content_type: application/octet-stream

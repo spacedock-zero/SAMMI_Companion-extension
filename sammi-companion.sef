@@ -1,7 +1,7 @@
 [extension_name]
 SAMMI Companion
 [extension_info]
-Powerful Hybrid Application, a nice companion for SAMMI
+A nice companion for SAMMI
 [extension_version]
 {{ version }}
 [insert_external]
@@ -9,37 +9,74 @@ Powerful Hybrid Application, a nice companion for SAMMI
 {{ html }}
 </div>
 [insert_command]
+
+SAMMI.extCommand('Companion: Request TTS', 3355443, 52, {
+	text: ['Text', 14, 'Hello!']
+});
+
 main();
 [insert_hook]
 //Deprecated
 [insert_script]
+function reconnect(){
+	const companionConnectButton = document.getElementById('companion-websocket-connect')
+	const companionConnectStatus = document.getElementById('companion-websocket-status')
+
+	if(!companionConnectButton || !companionConnectStatus){
+		SAMMI.alert("SAMMI Companion [Extension] Error")
+		return
+	}
+	const saved_companion_port = localStorage.getItem('companion_port') ?? '19135'
+	const saved_companion_host = localStorage.getItem('companion_host') ?? 'localhost'
+	let ws = new WebSocket(`ws://${saved_companion_host}:${saved_companion_port}`)
+	ws.addEventListener('open', ()=>{
+		console.info('Companion WS Open')
+		companionConnectButton.innerText = `Disconnect`
+		companionConnectStatus.innerText = `Connected`
+	})
+	ws.addEventListener('close', ()=>{
+		console.info('Companion WS Closed')
+		companionConnectButton.innerText = `Connect`
+		companionConnectStatus.innerText = `Waiting`
+	})
+	return ws;
+}
 function main() {
-    console.log("Loading SAMMI Companion Extension");
+	console.info("Bridge Connected, Loading SAMMI Companion [Extension]");
+	const companionConnectButton = document.getElementById('companion-websocket-connect')
+	if(!companionConnectButton){
+		SAMMI.alert("SAMMI Companion [Extension] Error")
+		return
+	}
 
-    
-    // SAMMI.alert('Example Extension is ready and listening.');
+	let ws = reconnect()
 
-    // Set up a listener for an extension command you created earlier
-    // This will run when user presses the button that triggers the command in SAMMI
-    sammiclient.on('TTS', (payload) => {
-        console.log("Command triggered", payload);
-        // get the button ID from the payload which SAMMI sent to the extension
-        const { FromButton }  = payload.Data 
-        // Get the value of the example extension box from the payload we set up earlier
-        const exampleBoxValue = payload.Data.exampleBox
-        // Here we can do something with the value, like append some text to it and send it back to SAMMI
-        const exampleBoxValueModified = exampleBoxValue + " - Modified";
-        // Send the modified value back to SAMMI by setting the variable value in the button that triggered the command
-        SAMMI.setVariable('exampleVariable', exampleBoxValueModified, FromButton)
-        // We can also ask SAMMI to return the value of a variable from a button
-        SAMMI.getVariable('exampleVariable', FromButton).then((data) => {
-            console.log("Variable value returned from SAMMI", data.Value);
-        });
-    });
+	companionConnectButton.addEventListener("pointerdown", ()=>{
+		if(ws && (ws.readyState == ws.OPEN)){
+			ws.close()
+		}
+		else {
+			ws = reconnect()
+			return;
+		}
 
-// Define more scripts and functions here
+	})
+
+	sammiclient.on('Companion: Request TTS', (payload) => {
+		const { FromButton }  = payload.Data 
+		
+		const text = payload.Data.text
+		const packet = {
+			version: 1,
+			type: 'tts_request',
+			body: text
+		}
+		ws?.send(JSON.stringify(packet))
+	});
+
+	SAMMI.alert("SAMMI Companion Ready")
 }
 [insert_over]
 { 
-    "sammi_version": "2023.3.0"
+	"sammi_version": "2023.3.0"
 }

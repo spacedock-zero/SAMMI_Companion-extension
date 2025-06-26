@@ -1,18 +1,47 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-	<meta charset="UTF-8" />
-	<!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>SAMMI Companion Extension</title>
-</head>
-
-<body class="w-[100vw] h-[100svh]">
-	<div class="w-full h-full bg-black text-9xl text-white">
-		hi
+<div
+	class="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center tw-bg-sammiblue tw-text-white tw-font-[Fredoka]">
+	<div
+		class="tw-h-96 tw-w-11/12 tw-flex tw-flex-col tw-justify-center tw-items-center tw-border-2 tw-border-sammiblue-light tw-rounded-md tw-gap-2">
+		<div class="tw-flex tw-flex-col tw-p-5 tw-justify-center tw-items-center tw-gap-2">
+			<span class="tw-text-4xl">
+				SAMMI Companion
+			</span>
+		</div>
+		<div class="tw-flex tw-flex-row tw-min-w-96 tw-justify-center tw-items-end tw-gap-2">
+			<div class="tw-flex tw-flex-col">
+				<label for="companion-websocket-host"> Companion Host </label>
+				<input type="string" id="companion-websocket-host" value="localhost"
+					class="tw-bg-sammiblue tw-border-2 tw-rounded-md tw-p-2">
+			</div>
+			<div class="tw-flex tw-flex-col">
+				<label for="companion-websocket-port"> Companion Port </label>
+				<input type="number" id="companion-websocket-port" value="19135"
+					class="tw-bg-sammiblue tw-border-2 tw-rounded-md tw-p-2">
+			</div>
+			<button id="companion-websocket-connect"
+				class="tw-text-center tw-p-2 tw-border-2 tw-rounded-md active:tw-bg-sammiblue-light tw-min-w-44">
+				Connect
+			</button>
+		</div>
+		<div
+			class="tw-flex tw-flex-row tw-w-96 tw-p-2 tw-justify-center tw-items-end tw-gap-2 tw-text-xl tw-border-2 tw-rounded-md">
+			<span>
+				Status:
+			</span>
+			<span id="companion-websocket-status"> Waiting </span>
+		</div>
+		<div>
+			<span class="tw-decoration-purple-700">
+				by
+				<a href="https://lnkx.our-space.xyz/zeathemays">
+					ZeaTheMays
+				</a>
+				&
+				<a href="https://lnkx.our-space.xyz/stargazer">
+					stargazer
+				</a>
+			</span>
+		</div>
 	</div>
 	<script type="module" src="/src/main.ts"></script>
-</body>
-
-</html>
+</div>
