@@ -28,6 +28,7 @@ function reconnect(){
 	}
 	const saved_companion_port = localStorage.getItem('companion_port') ?? '19135'
 	const saved_companion_host = localStorage.getItem('companion_host') ?? 'localhost'
+	try{
 	let ws = new WebSocket(`ws://${saved_companion_host}:${saved_companion_port}`)
 	ws.addEventListener('open', ()=>{
 		console.info('Companion WS Open')
@@ -40,11 +41,17 @@ function reconnect(){
 		companionConnectStatus.innerText = `Waiting`
 	})
 	return ws;
+	}catch(err){
+		return reconnect()
+	}
 }
 function main() {
 	console.info("Bridge Connected, Loading SAMMI Companion [Extension]");
+	localStorage.setItem('companion_autoconnect', "true")
 	const companionConnectButton = document.getElementById('companion-websocket-connect')
-	if(!companionConnectButton){
+	const companionConnectStatus = document.getElementById('companion-websocket-status')
+
+	if(!companionConnectButton || !companionConnectStatus){
 		SAMMI.alert("SAMMI Companion [Extension] Error")
 		return
 	}
@@ -53,14 +60,23 @@ function main() {
 
 	companionConnectButton.addEventListener("pointerdown", ()=>{
 		if(ws && (ws.readyState == ws.OPEN)){
+			localStorage.setItem('companion_autoconnect', "false")
 			ws.close()
 		}
 		else {
+			localStorage.setItem('companion_autoconnect', "true")
 			ws = reconnect()
 			return;
 		}
-
 	})
+
+	setInterval(()=>{
+		if(ws && (ws.readyState == ws.OPEN)) return;
+		if(localStorage.getItem('companion_autoconnect') == "true"){
+			companionConnectStatus.innerText = "Retrying..."
+			ws = reconnect()
+		}
+	}, 30 * 1000)
 
 	sammiclient.on('Companion: Request TTS', (payload) => {
 		const { FromButton }  = payload.Data 
@@ -71,7 +87,12 @@ function main() {
 			type: 'tts_request',
 			body: text
 		}
-		ws?.send(JSON.stringify(packet))
+
+		if(!ws || (ws.readyState != ws.OPEN)){
+			SAMMI.alert("Companion Not Connected, TTS Request Lost")
+			return;
+		}
+		ws.send(JSON.stringify(packet))
 	});
 
 	SAMMI.alert("SAMMI Companion Ready")
