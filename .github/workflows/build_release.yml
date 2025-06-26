@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Build
@@ -25,7 +25,7 @@ jobs:
         env:
           VERSION: ${{ github.event.inputs.action_ref }}
         shell: bash
-        run: .github/build.sh
+        run: bash .github/build.sh
       - name: Create draft release
         id: create_release
         uses: actions/create-release@v1
