@@ -21,30 +21,11 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: Replace version and HTML
+      - name: Assemble Extension File
         env:
           VERSION: ${{ github.event.inputs.action_ref }}
         shell: bash
-        #LLM, check later
-        run: |
-          [ -f dist/index.html ] || { echo "Error: dist/index.html not found."; exit 1; }
-          [ -s dist/index.html ] || { echo "Error: dist/index.html is empty."; exit 1; }
-          awk -v version="${VERSION}" -v html="$(<dist/index.html)" '
-            BEGIN { html_replaced = 0 }
-            /{{ version }}/ { gsub(/{{ version }}/, version) }
-            /{{ html }}/ {
-              print html
-              html_replaced = 1
-              next
-            }
-            { print }
-            END {
-              if (!html_replaced) {
-                print "Error: {{ html }} placeholder not found." > "/dev/stderr"
-                exit 1
-              }
-            }
-          ' sammi-companion.sef > sammi-companion.sef.tmp && mv sammi-companion.sef.tmp sammi-companion.sef
+        run: .github/build.sh
       - name: Create draft release
         id: create_release
         uses: actions/create-release@v1
