@@ -29,17 +29,10 @@ jobs:
       - name: Create draft release
         id: create_release
         uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.event.inputs.action_ref }}
-          release_name: "Release ${{ github.event.inputs.action_ref }}"
-          draft: true
-      - name: Upload release asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: sammi-companion.sef
-          asset_name: sammi-companion.sef
-          asset_content_type: application/octet-stream
           release_name: "Release ${{ github.event.inputs.action_ref }}"
           draft: true
       - name: Upload release asset
