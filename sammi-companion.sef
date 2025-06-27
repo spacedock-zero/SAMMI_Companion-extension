@@ -10,9 +10,28 @@ A nice companion for SAMMI
 </div>
 [insert_command]
 
+/* Request */
 SAMMI.extCommand('Companion: Request TTS', 3355443, 52, {
 	text: ['Text', 14, 'Hello!']
 });
+/* Control */
+SAMMI.extCommand('Companion: TTS Skip', 3355443, 52, {
+	text: ['Will Skip to next TTS in queue', 30, 'Skip!']
+});
+SAMMI.extCommand('Companion: TTS Queue Pause', 3355443, 52, {
+	text: ['Will Pause the Queue', 30, 'Pause Queue']
+});
+SAMMI.extCommand('Companion: TTS Queue Continue', 3355443, 52, {
+	text: ['Will Resume the Queue', 30, 'Resume Queue']
+});
+/* Param */
+SAMMI.extCommand('Companion: TTS Rate', 3355443, 52, {
+	text: ['Rate', 11, 1]
+});
+SAMMI.extCommand('Companion: TTS Volume', 3355443, 52, {
+	text: ['Volume', 11, 0.7]
+});
+
 
 main();
 [insert_hook]
@@ -95,6 +114,74 @@ function main() {
 		const packet = {
 			version: 1,
 			type: 'tts_request',
+			body: text
+		}
+
+		if(!ws || (ws.readyState != ws.OPEN)){
+			SAMMI.alert("Companion Not Connected, TTS Request Lost")
+			return;
+		}
+		ws.send(JSON.stringify(packet))
+	});
+	sammiclient.on('Companion: TTS Skip', (payload) => {
+		const packet = {
+			version: 1,
+			type: 'tts_skip',
+		}
+
+		if(!ws || (ws.readyState != ws.OPEN)){
+			SAMMI.alert("Companion Not Connected, TTS Request Lost")
+			return;
+		}
+		ws.send(JSON.stringify(packet))
+	});
+	sammiclient.on('Companion: TTS Queue Continue', (payload) => {
+		const packet = {
+			version: 1,
+			type: 'tts_queuecontinue',
+		}
+
+		if(!ws || (ws.readyState != ws.OPEN)){
+			SAMMI.alert("Companion Not Connected, TTS Request Lost")
+			return;
+		}
+		ws.send(JSON.stringify(packet))
+	});
+	sammiclient.on('Companion: TTS Queue Pause', (payload) => {
+		const packet = {
+			version: 1,
+			type: 'tts_queuestop',
+		}
+
+		if(!ws || (ws.readyState != ws.OPEN)){
+			SAMMI.alert("Companion Not Connected, TTS Request Lost")
+			return;
+		}
+		ws.send(JSON.stringify(packet))
+	});
+	sammiclient.on('Companion: TTS Rate', (payload) => {
+		const { FromButton }  = payload.Data 
+		
+		const text = payload.Data.text
+		const packet = {
+			version: 1,
+			type: 'tts_rate',
+			body: text
+		}
+
+		if(!ws || (ws.readyState != ws.OPEN)){
+			SAMMI.alert("Companion Not Connected, TTS Request Lost")
+			return;
+		}
+		ws.send(JSON.stringify(packet))
+	});
+	sammiclient.on('Companion: TTS Volume', (payload) => {
+		const { FromButton }  = payload.Data 
+		
+		const text = payload.Data.text
+		const packet = {
+			version: 1,
+			type: 'tts_volume',
 			body: text
 		}
 
