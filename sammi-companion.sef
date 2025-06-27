@@ -40,6 +40,16 @@ function reconnect(){
 		companionConnectButton.innerText = `Connect`
 		companionConnectStatus.innerText = `Waiting`
 	})
+	ws.addEventListener("message",(evt)=>{
+		if(typeof evt.data != "string") return
+		try {
+			const parsed = JSON.parse(evt.data);
+			if(!parsed) return;
+			SAMMI.triggerExt(`companion-${parsed.type}`, parsed)
+		} catch (error) {
+			console.warn("Error Receiving Message", error)
+		}
+	})
 	return ws;
 	}catch(err){
 		return reconnect()
@@ -98,6 +108,4 @@ function main() {
 	SAMMI.alert("SAMMI Companion Ready")
 }
 [insert_over]
-{ 
-	"sammi_version": "2023.3.0"
-}
+{ "deck_data": "{ \"background_color\": 5385234.0, \"on\": true, \"grid_y\": 6.0, \"snap_grid\": 1.0, \"lb_version\": \"2025.1.1\", \"background_image\": \"\", \"sammi_version\": \"2025.1.1\", \"encrypted\": false, \"adaptive_resizing\": 0.0, \"unique_id\": \"20250401165305121126414\", \"button_list\": [ { \"color\": 16042349.0, \"persistent\": 1.0, \"text\": \"Open\\nCompanion\", \"release_duration\": 0.0, \"queueable\": 0.0, \"command_list\": [ { \"b1\": \"\", \"cmd\": 306.0, \"obsid\": \"Main\", \"pos\": 0.0, \"vis\": 1.0, \"ms\": 0.0, \"sel\": false, \"dis\": 0.0, \"xpan\": 0.0, \"b0\": \"start sammi-companion:\\\/\\\/open\" } ], \"press_type\": 0.0, \"x\": 0.14285714285714284921269268124888, \"is_transparent\": 0.0, \"border\": 0.0, \"image\": \"\", \"triggers\": [ ], \"group_id\": \"\", \"overlappable\": 0.0, \"init_variable\": \"\", \"deck\": 0.0, \"width\": 0.28571428571428569842538536249776, \"button_id\": \"companion-open\", \"button_duration\": 0.0, \"y\": 0.1666666666666666574148081281237, \"switch_deck\": \"\", \"height\": 0.33333333333333337034076748750522, \"release_list\": [ ], \"functions\": 65.0, \"stretch\": 0.0 }, { \"color\": 14572469.0, \"persistent\": true, \"text\": \"Send TTS Request\", \"release_duration\": 0.0, \"queueable\": false, \"command_list\": [ { \"text\": \"Hello from SAMMI!\", \"cmd\": 0.0, \"obsid\": \"Main\", \"pos\": 0.0, \"vis\": true, \"ms\": 0.0, \"sel\": false, \"dis\": false, \"xpan\": 0.0, \"extcmd\": \"Companion: Request TTS\", \"ext\": \"SAMMI Bridge\" } ], \"press_type\": 0.0, \"x\": 0.14285714285714284921269268124888, \"is_transparent\": false, \"border\": 0.0, \"image\": \"\", \"triggers\": [ ], \"group_id\": \"\", \"overlappable\": false, \"init_variable\": \"\", \"deck\": 0.0, \"width\": 0.28571428571428569842538536249776, \"button_id\": \"companion-tts\", \"button_duration\": 0.0, \"y\": 0.5, \"switch_deck\": \"\", \"height\": 0.33333333333333337034076748750522, \"release_list\": [ ], \"functions\": 65.0, \"stretch\": false }, { \"color\": 12632256.0, \"persistent\": true, \"text\": \"click\", \"release_duration\": 0.0, \"queueable\": false, \"command_list\": [ { \"b1\": \"all\", \"cmd\": 66.0, \"obsid\": \"Main\", \"pos\": 0.0, \"vis\": true, \"ms\": 0.0, \"sel\": false, \"dis\": false, \"xpan\": 0.0, \"b0\": \"mousepress\" } ], \"press_type\": 0.0, \"x\": 0.57142857142857139685077072499553, \"is_transparent\": false, \"border\": 0.0, \"image\": \"\", \"triggers\": [ { \"case_sensitive\": false, \"message\": \"companion-mousepress\", \"group_id\": \"\", \"button_id\": \"companion-click\", \"trg\": 12.0, \"allow_empty_wildcard\": false } ], \"group_id\": \"\", \"overlappable\": false, \"init_variable\": \"\", \"deck\": 0.0, \"width\": 0.14285714285714284921269268124888, \"button_id\": \"companion-click\", \"button_duration\": 0.0, \"y\": 0.1666666666666666574148081281237, \"switch_deck\": \"\", \"height\": 0.16666666666666674068153497501044, \"release_list\": [ ], \"functions\": 81.0, \"stretch\": false }, { \"color\": 12632256.0, \"persistent\": true, \"text\": \"keypress\", \"release_duration\": 0.0, \"queueable\": false, \"command_list\": [ { \"b1\": \"all\", \"cmd\": 66.0, \"obsid\": \"Main\", \"pos\": 0.0, \"vis\": true, \"ms\": 0.0, \"sel\": false, \"dis\": false, \"xpan\": 0.0, \"b0\": \"keypress\" } ], \"press_type\": 0.0, \"x\": 0.57142857142857139685077072499553, \"is_transparent\": false, \"border\": 0.0, \"image\": \"\", \"triggers\": [ { \"case_sensitive\": false, \"message\": \"companion-keypress\", \"group_id\": \"\", \"button_id\": \"companion-keypress\", \"trg\": 12.0, \"allow_empty_wildcard\": false } ], \"group_id\": \"\", \"overlappable\": false, \"init_variable\": \"\", \"deck\": 0.0, \"width\": 0.14285714285714284921269268124888, \"button_id\": \"companion-keypress\", \"button_duration\": 0.0, \"y\": 0.5, \"switch_deck\": \"\", \"height\": 0.1666666666666666574148081281237, \"release_list\": [ ], \"functions\": 81, \"stretch\": false } ], \"deck_name\": \"Companion\", \"grid_x\": 7.0, \"stretch\": 0.0 }", "unique_id": "20250401165305121126414", "include_image": { } }
