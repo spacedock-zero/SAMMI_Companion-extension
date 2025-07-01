@@ -7,7 +7,7 @@ Welcome to the source code and docs of the SAMMI Companion extension. This exten
 
 # Features
 - **TTS Engine**: A text-to-speech engine that can be used to read out text sent by SAMMI to Companion with Extension Commands.
-  - **Companion: Request TTS**: Adds a request to the TTS queue.
+  - **Companion: TTS Request**: Adds a request to the TTS queue.
   - **Companion: TTS Queue Pause**: Stops the TTS queue from being processed.
   - **Companion: TTS Queue Resume**: Resumes the TTS queue processing.
   - **Companion: TTS Skip**: Stops the playing TTS message, if the queue is not paused it starts the next one.

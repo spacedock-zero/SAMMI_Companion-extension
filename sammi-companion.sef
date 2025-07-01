@@ -11,7 +11,7 @@ A nice companion for SAMMI
 [insert_command]
 
 /* Request */
-SAMMI.extCommand('Companion: Request TTS', 3355443, 52, {
+SAMMI.extCommand('Companion: TTS Request', 3355443, 52, {
 	text: ['Text', 14, 'Hello!']
 });
 /* Control */
@@ -127,7 +127,7 @@ function main() {
 		}
 	}, 30 * 1000)
 
-	sammiclient.on('Companion: Request TTS', (payload) => {
+	sammiclient.on('Companion: TTS Request', (payload) => {
 		const { FromButton }  = payload.Data 
 		
 		const text = payload.Data.text
