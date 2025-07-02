@@ -52,6 +52,7 @@ function handleSongRecoPacket(data){
 			console.error("Unknown songreco packet", data)
 			break;
 	}
+	SAMMI.triggerExt(`companion-songreco`)
 }
 function reconnect(){
 	const companionConnectButton = document.getElementById('companion-websocket-connect')
