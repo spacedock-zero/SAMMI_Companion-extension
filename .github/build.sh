@@ -27,7 +27,7 @@ while IFS= read -r line; do
 	if [[ "$line" == *"{{ html }}"* ]]; then
 		html_placeholder_found=1
 		cat dist/index.html >>"$temp_output"
-	elif [[ "$line" == *"{{ deck_data }}"* ]]; then
+	elif [[ "$line" == *"{{ deckdata }}"* ]]; then
 		deck_data_placeholder_found=1
 		cat sammi_deck.json >>"$temp_output"
 	else
@@ -39,7 +39,8 @@ if [ "$html_placeholder_found" -eq 1 ] && [ "$deck_data_placeholder_found" -eq 1
 	echo "HTML content and Deck data inserted successfully."
 	mv "$temp_output" sammi-companion.built.sef
 else
-	echo "Either: {{ html }} or {{ deck_data }} placeholder not found in the template." >&2
+	echo "Either: {{ html }} or {{ deckdata }} placeholder not found in the template." >&2
+	echo $html_placeholder_found , $deck_data_placeholder_found
 	rm "$temp_output"
 	exit 1
 fi

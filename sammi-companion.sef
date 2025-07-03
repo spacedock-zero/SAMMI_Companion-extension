@@ -241,4 +241,4 @@ function main() {
 	SAMMI.alert("SAMMI Companion Ready")
 }
 [insert_over]
-{{ deck_data }}
+{{ deckdata }}
