@@ -37,11 +37,11 @@ SAMMI.extCommand('Companion: TTS Volume', 3355443, 52, {
 });
 
 
-main();
+companion_main();
 [insert_hook]
 //Deprecated
 [insert_script]
-function handleSongRecoPacket(data){
+function companion_handleSongRecoPacket(data){
 	switch (data.type) {
 		case 'songreco_lyric':
 			SAMMI.setVariable('songreco_lyric', data.body, 'companion-songreco')
@@ -58,7 +58,7 @@ function handleSongRecoPacket(data){
 	}
 	SAMMI.triggerExt(`companion-songreco`)
 }
-function reconnect(){
+function companion_reconnect(){
 	const companionConnectButton = document.getElementById('companion-websocket-connect')
 	const companionConnectStatus = document.getElementById('companion-websocket-status')
 
@@ -86,7 +86,7 @@ function reconnect(){
 			const parsed = JSON.parse(evt.data);
 			if(!parsed) return;
 			if(parsed.type.includes("songreco_")){
-				handleSongRecoPacket(parsed)
+				companion_handleSongRecoPacket(parsed)
 				return
 			}
 			SAMMI.triggerExt(`companion-${parsed.type}`, parsed)
@@ -96,10 +96,10 @@ function reconnect(){
 	})
 	return ws;
 	}catch(err){
-		return reconnect()
+		return companion_reconnect()
 	}
 }
-function main() {
+function companion_main() {
 	console.info("Bridge Connected, Loading SAMMI Companion [Extension]");
 	localStorage.setItem('companion_autoconnect', "true")
 	const companionConnectButton = document.getElementById('companion-websocket-connect')
@@ -110,7 +110,7 @@ function main() {
 		return
 	}
 
-	let ws = reconnect()
+	let ws = companion_reconnect()
 
 	companionConnectButton.addEventListener("pointerdown", ()=>{
 		if(ws && (ws.readyState == ws.OPEN)){
@@ -119,7 +119,7 @@ function main() {
 		}
 		else {
 			localStorage.setItem('companion_autoconnect', "true")
-			ws = reconnect()
+			ws = companion_reconnect()
 			return;
 		}
 	})
@@ -128,7 +128,7 @@ function main() {
 		if(ws && (ws.readyState == ws.OPEN)) return;
 		if(localStorage.getItem('companion_autoconnect') == "true"){
 			companionConnectStatus.innerText = "Retrying..."
-			ws = reconnect()
+			ws = companion_reconnect()
 		}
 	}, 30 * 1000)
 
