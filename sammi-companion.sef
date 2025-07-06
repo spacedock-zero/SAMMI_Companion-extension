@@ -44,19 +44,23 @@ companion_main();
 function companion_handleSongRecoPacket(data){
 	switch (data.type) {
 		case 'songreco_lyric':
-			SAMMI.setVariable('songreco_lyric', data.body, 'companion-songreco')
+			SAMMI.setVariable('lyric', data.body, 'companion-songreco')
 		break;
 		case 'songreco_lyrics':
-			SAMMI.setVariable('songreco_lyrics', data.body, 'companion-songreco')
+			SAMMI.setVariable('lyrics', data.body, 'companion-songreco')
 		break;
 		case 'songreco_details':
-			SAMMI.setVariable('songreco_track', data.body, 'companion-songreco')
+			SAMMI.setVariable('track', data.body, 'companion-songreco')
 		break;
 		default:
 			console.error("Unknown songreco packet", data)
 			break;
 	}
 	SAMMI.triggerExt(`companion-songreco`)
+}
+function companion_handleTTSStatusPacket(data){
+	SAMMI.setVariable('status', data.body, 'companion-tts')
+	SAMMI.triggerExt(`companion-tts`)
 }
 function companion_reconnect(){
 	const companionConnectButton = document.getElementById('companion-websocket-connect')
@@ -87,6 +91,10 @@ function companion_reconnect(){
 			if(!parsed) return;
 			if(parsed.type.includes("songreco_")){
 				companion_handleSongRecoPacket(parsed)
+				return
+			}
+			if(parsed.type.includes("tts_status")){
+				companion_handleTTSStatusPacket(parsed)
 				return
 			}
 			SAMMI.triggerExt(`companion-${parsed.type}`, parsed)

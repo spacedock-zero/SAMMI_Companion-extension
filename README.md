@@ -21,6 +21,10 @@ A text-to-speech engine that can be used to read out text sent by SAMMI to Compa
   - **Companion: TTS Skip**: Stops the playing TTS message, if the queue is not paused it starts the next one.
   - **Companion: TTS Volume**: Sets the volume of the TTS engine.
   - **Companion: TTS Rate**: Sets the audio speed of the TTS engine.
+- **Variables**:
+  - **companion-tts.status**: Variable that contains the current status of the TTS engine. (`playing`, `idle`, `generating`).
+- **Extension Triggers**:
+  - **companion-tts**: Triggers whenever an update to the TTS status is received.
 
 ### **Input Triggers**
 Extension triggers that allow Keyboard or Mouse input to trigger actions in SAMMI.
@@ -37,8 +41,8 @@ Extension triggers that allow Keyboard or Mouse input to trigger actions in SAMM
 ### **Song Recognition**
 Uses the Companion song fingerprinting engine to detect currently playing music from a device and set according variables within SAMMI.
 - **Variables**:
-  - **companion-songreco.songreco_lyric**: Variable that contains the current lyric (line) of the detected song currently playing, synced with playback, Companion will try to keep it as close as possible.
-  - **companion-songreco.songreco_lyrics**: Variable that contains the full lyrics of the detected song currently playing.
-  - **companion-songreco.songreco_track**: Variable that contains the details of the detected song currently playing, including title, artist, album, and cover art.
+  - **companion-songreco.lyric**: Variable that contains the current lyric (line) of the detected song currently playing, synced with playback, Companion will try to keep it as close as possible.
+  - **companion-songreco.lyrics**: Variable that contains the full lyrics of the detected song currently playing.
+  - **companion-songreco.track**: Variable that contains the details of the detected song currently playing, including title, artist, album, and cover art url.
 - **Extension Triggers**:
   - **companion-songreco**: Triggers whenever an update to data is received, from all of the above.
