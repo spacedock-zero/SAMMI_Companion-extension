@@ -2,7 +2,8 @@
 
 To get started with the SAMMI Companion Extension, follow these steps:
 1. **Install SAMMI Companion**: 
-   - Download and install the latest version of [SAMMI Companion](https://github.com/spacedock-zero/SAMMI-Companion_pre/releases) (follow the link to the latest release).
+   - Download the latest version of [SAMMI Companion](https://github.com/spacedock-zero/SAMMI-Companion_pre/releases) (follow the link to the latest release, and download the .exe installer).
+   - Run the installer and follow the instructions to install SAMMI Companion on your computer.
 2. **Install the SAMMI Companion Extension**:
    - Download the latest version of the [SAMMI Companion Extension](https://github.com/spacedock-zero/SAMMI_Companion-extension/releases)
    - Open SAMMI
