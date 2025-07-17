@@ -7,6 +7,8 @@ An extension for _SAMMI_ that connects to [_SAMMI Companion_](https://github.com
 
 All the features are not contained directly in this extension, but rather in the _SAMMI Companion_ application, which needs to be installed and running on your computer. This extension connects to it and uses its features to provide additional functionality to SAMMI.
 
+Want a quick setup guide? Check out the [Quick Setup Guide](./docs/quick-setup.md).
+
 > This project is not associated with or endorsed by [SAMMI](https://sammi.solutions/)
 
 ## Features
