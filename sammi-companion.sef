@@ -18,6 +18,10 @@ SAMMI.extCommand('Companion: TTS Request (Consistent)', 3355443, 52, {
 	text: ['Text', 14, 'Hello!'],
 	key: ['Username', 15, 'username_variable']
 });
+SAMMI.extCommand('Companion: TTS Request (Select Voice)', 3355443, 52, {
+	text: ['Text', 14, 'Hello!'],
+	voice: ['Voice', 14, 'Voice Name']
+});
 /* Control */
 SAMMI.extCommand('Companion: TTS Skip', 3355443, 52, {
 	text: ['Will Skip to next TTS in queue', 30, 'Skip!']
@@ -168,6 +172,26 @@ function companion_main() {
 			body: {
 				text,
 				key
+			}
+		}
+
+		if(!ws || (ws.readyState != ws.OPEN)){
+			SAMMI.alert("Companion Not Connected, TTS Request Lost")
+			return;
+		}
+		ws.send(JSON.stringify(packet))
+	});
+	sammiclient.on('Companion: TTS Request (Select Voice)', (payload) => {
+		const { FromButton }  = payload.Data 
+		
+		const text = payload.Data.text
+		const voice = payload.Data.voice
+		const packet = {
+			version: 1,
+			type: 'tts_request_wvoice',
+			body: {
+				text,
+				voice
 			}
 		}
 
