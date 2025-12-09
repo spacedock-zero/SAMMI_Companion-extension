@@ -1,4 +1,4 @@
-# SAMMI Companion (Extension)
+# Companion (SAMMI Extension)
 
 Hi!
 Welcome to the source code and docs of the _SAMMI Companion Extension_. This extension is the way we make _SAMMI Companion_ work with SAMMI.

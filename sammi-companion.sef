@@ -1,5 +1,5 @@
 [extension_name]
-SAMMI Companion
+Companion
 [extension_info]
 A nice companion for SAMMI
 [extension_version]
@@ -54,7 +54,9 @@ function companion_handleSongRecoPacket(data){
 			SAMMI.setVariable('lyrics', data.body, 'companion-songreco')
 		break;
 		case 'songreco_details':
-			SAMMI.setVariable('track', data.body, 'companion-songreco')
+			SAMMI.setVariable('track', data.body, 'companion-songreco').catch((e)=>{
+				comsole.error("SAMMI Failed to set track details variable")
+			})
 		break;
 		default:
 			console.error("Unknown songreco packet", data)
@@ -71,7 +73,7 @@ function companion_reconnect(){
 	const companionConnectStatus = document.getElementById('companion-websocket-status')
 
 	if(!companionConnectButton || !companionConnectStatus){
-		SAMMI.alert("SAMMI Companion [Extension] Error")
+		SAMMI.alert("Companion [Extension] Error")
 		return
 	}
 	const saved_companion_port = localStorage.getItem('companion_port') ?? '19135'
@@ -89,7 +91,10 @@ function companion_reconnect(){
 		companionConnectStatus.innerText = `Waiting`
 	})
 	ws.addEventListener("message",(evt)=>{
-		if(typeof evt.data != "string") return
+		if(typeof evt.data != "string") {
+			console.warn("Ignored non string packet", evt)
+			return
+		}
 		try {
 			const parsed = JSON.parse(evt.data);
 			if(!parsed) return;
@@ -112,13 +117,13 @@ function companion_reconnect(){
 	}
 }
 function companion_main() {
-	console.info("Bridge Connected, Loading SAMMI Companion [Extension]");
+	console.info("Bridge Connected, Loading Companion [Extension]");
 	localStorage.setItem('companion_autoconnect', "true")
 	const companionConnectButton = document.getElementById('companion-websocket-connect')
 	const companionConnectStatus = document.getElementById('companion-websocket-status')
 
 	if(!companionConnectButton || !companionConnectStatus){
-		SAMMI.alert("SAMMI Companion [Extension] Error")
+		SAMMI.alert("Companion [Extension] Error")
 		return
 	}
 
@@ -270,7 +275,7 @@ function companion_main() {
 		ws.send(JSON.stringify(packet))
 	});
 
-	SAMMI.alert("SAMMI Companion Ready")
+	SAMMI.alert("Companion Ready")
 }
 [insert_over]
 {{ deckdata }}
