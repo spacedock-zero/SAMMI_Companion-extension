@@ -12,7 +12,9 @@ Want a quick setup guide? Check out the [Quick Setup Guide](./docs/quick-setup.m
 > This project is not associated with or endorsed by [SAMMI](https://sammi.solutions/)
 
 ## Features
+
 ### **TTS Engine**
+
 A text-to-speech engine that can be used to read out text sent by SAMMI to Companion with Extension Commands.
 
 - **Commands**:
@@ -29,8 +31,29 @@ A text-to-speech engine that can be used to read out text sent by SAMMI to Compa
 - **Extension Triggers**:
   - **companion-tts**: Triggers whenever an update to the TTS status is received.
 
+### **Speech-to-Text (STT)**
+
+Control the Speech-to-Text engine in Companion.
+
+- **Commands**:
+  - **Companion: STT Start**: Starts the STT engine.
+  - **Companion: STT Stop**: Stops the STT engine.
+  - **Companion: STT Clear**: Clears the current STT recognition log.
+
+### **Memory Management**
+
+Interact with the Companion's variable memory system.
+
+- **Commands**:
+  - **Companion: Set Memory**: Sets a variable in Companion.
+  - **Companion: Get Memory**: Requests the value of a variable from Companion.
+- **Extension Triggers**:
+  - **companion-memory**: Triggers when a memory value is updated or retrieved. The variable is automatically set in the `companion-memory` button.
+
 ### **Input Triggers**
+
 Extension triggers that allow Keyboard or Mouse input to trigger actions in SAMMI.
+
 - **Extension Triggers**:
   - **companion-keypress**: Triggers an action when a key is pressed, pull data contains the key name.
   - **companion-keyrelease**: Triggers an action when a key is released, pull data contains the key name.
@@ -42,7 +65,9 @@ Extension triggers that allow Keyboard or Mouse input to trigger actions in SAMM
 ## Experimental Features
 
 ### **Song Recognition**
+
 Uses the Companion song fingerprinting engine to detect currently playing music from a device and set according variables within SAMMI.
+
 - **Variables**:
   - **companion-songreco.lyric**: Variable that contains the current lyric (line) of the detected song currently playing, synced with playback, Companion will try to keep it as close as possible.
   - **companion-songreco.lyrics**: Variable that contains the full lyrics of the detected song currently playing.
