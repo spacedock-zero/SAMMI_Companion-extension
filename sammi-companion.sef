@@ -32,12 +32,32 @@ SAMMI.extCommand('Companion: TTS Queue Pause', 3355443, 52, {
 SAMMI.extCommand('Companion: TTS Queue Continue', 3355443, 52, {
 	text: ['Will Resume the Queue', 30, 'Resume Queue']
 });
+
+SAMMI.extCommand('Companion: STT Start', 3355443, 52, {
+	text: ['Will Start the STT Engine', 30, 'Start']
+});
+SAMMI.extCommand('Companion: STT Stop', 3355443, 52, {
+	text: ['Will Stop the STT Engine', 30, 'Stop']
+});
+SAMMI.extCommand('Companion: STT Clear', 3355443, 52, {
+	text: ['Will Clear the STT recognition log', 30, 'Clear']
+});
 /* Param */
 SAMMI.extCommand('Companion: TTS Rate', 3355443, 52, {
 	text: ['Rate', 11, 1]
 });
 SAMMI.extCommand('Companion: TTS Volume', 3355443, 52, {
 	text: ['Volume', 11, 0.7]
+});
+/* Memory Control */
+SAMMI.extCommand('Companion: Set Memory', 3355443, 52, {
+	key: ['Memory Name', 14, 'myVar'],
+	value: ['Value', 14, 'value'],
+	scope: ['Scope (SHORT/LONG)', 14, 'SHORT']
+});
+SAMMI.extCommand('Companion: Get Memory', 3355443, 52, {
+	key: ['Memory Name', 14, 'myVar'],
+	scope: ['Scope (SHORT/LONG)', 14, 'SHORT']
 });
 
 
@@ -68,7 +88,11 @@ function companion_handleTTSStatusPacket(data){
 	SAMMI.setVariable('status', data.body, 'companion-tts')
 	SAMMI.triggerExt(`companion-tts`)
 }
-function companion_reconnect(){
+	function companion_handleMemoryUpdatePacket(data){
+		SAMMI.setVariable(data.body.key, data.body.value, 'companion-memory')
+		SAMMI.triggerExt(`companion-memory`)
+	}
+	function companion_reconnect(){
 	const companionConnectButton = document.getElementById('companion-websocket-connect')
 	const companionConnectStatus = document.getElementById('companion-websocket-status')
 
@@ -104,6 +128,10 @@ function companion_reconnect(){
 			}
 			if(parsed.type.includes("tts_status")){
 				companion_handleTTSStatusPacket(parsed)
+				return
+			}
+			if(parsed.type.includes("memory_update")){
+				companion_handleMemoryUpdatePacket(parsed)
 				return
 			}
 			SAMMI.triggerExt(`companion-${parsed.type}`, parsed)
@@ -273,6 +301,41 @@ function companion_main() {
 			return;
 		}
 		ws.send(JSON.stringify(packet))
+	});
+
+	sammiclient.on('Companion: STT Start', () => {
+		if(!ws || ws.readyState != ws.OPEN) return;
+		ws.send(JSON.stringify({ version: 1, type: 'stt_start' }));
+	});
+
+	sammiclient.on('Companion: STT Stop', () => {
+		if(!ws || ws.readyState != ws.OPEN) return;
+		ws.send(JSON.stringify({ version: 1, type: 'stt_stop' }));
+	});
+
+	sammiclient.on('Companion: STT Clear', () => {
+		if(!ws || ws.readyState != ws.OPEN) return;
+		ws.send(JSON.stringify({ version: 1, type: 'stt_clear' }));
+	});
+
+	sammiclient.on('Companion: Set Memory', (payload) => {
+		if(!ws || ws.readyState != ws.OPEN) return;
+		const { key, value, scope } = payload.Data;
+		ws.send(JSON.stringify({ 
+			version: 1, 
+			type: 'memory_set', 
+			body: { variable: key, value, scope } 
+		}));
+	});
+
+	sammiclient.on('Companion: Get Memory', (payload) => {
+		if(!ws || ws.readyState != ws.OPEN) return;
+		const { key, scope } = payload.Data;
+		ws.send(JSON.stringify({ 
+			version: 1, 
+			type: 'memory_query', 
+			body: { variable: key, scope } 
+		}));
 	});
 
 	SAMMI.alert("Companion Ready")
