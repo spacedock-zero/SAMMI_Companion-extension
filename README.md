@@ -50,6 +50,15 @@ Interact with the Companion's variable memory system.
 - **Extension Triggers**:
   - **companion-memory**: Triggers when a memory value is updated or retrieved. The variable is automatically set in the `companion-memory` button.
 
+### **Soundboard**
+
+Control the Soundboard in Companion.
+
+- **Commands**:
+  - **Companion: Soundboard Play**: Plays a sound by name.
+  - **Companion: Soundboard Stop**: Stops all playing sounds.
+  - **Companion: Soundboard Volume**: Sets the global soundboard volume (0.0 - 1.0).
+
 ### **Input Triggers**
 
 Extension triggers that allow Keyboard or Mouse input to trigger actions in SAMMI.
