@@ -38,6 +38,15 @@ SAMMI.extCommand('Companion: TTS Rate', 3355443, 52, {
 SAMMI.extCommand('Companion: TTS Volume', 3355443, 52, {
 	text: ['Volume', 11, 0.7]
 });
+/* Soundboard */
+SAMMI.extCommand('Companion: Soundboard Play', 3355443, 52, {
+	name: ['Sound Name', 14, 'sound_name']
+});
+SAMMI.extCommand('Companion: Soundboard Stop', 3355443, 52, {});
+SAMMI.extCommand('Companion: Soundboard Volume', 3355443, 52, {
+	volume: ['Volume (0-1)', 11, 1]
+});
+
 /* Memory Control */
 SAMMI.extCommand('Companion: Set Memory', 3355443, 52, {
 	key: ['Memory Name', 14, 'myVar'],

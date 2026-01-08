@@ -272,6 +272,35 @@ function companion_main() {
 		}));
 	});
 
+	sammiclient.on('Companion: Soundboard Play', (payload) => {
+		if (!ws || ws.readyState != ws.OPEN) return;
+		const { name } = payload.Data;
+		ws.send(JSON.stringify({
+			version: 1,
+			type: 'soundboard_play',
+			body: { name }
+		}));
+	});
+
+	sammiclient.on('Companion: Soundboard Stop', () => {
+		if (!ws || ws.readyState != ws.OPEN) return;
+		ws.send(JSON.stringify({
+			version: 1,
+			type: 'soundboard_stop',
+			body: null
+		}));
+	});
+
+	sammiclient.on('Companion: Soundboard Volume', (payload) => {
+		if (!ws || ws.readyState != ws.OPEN) return;
+		const { volume } = payload.Data;
+		ws.send(JSON.stringify({
+			version: 1,
+			type: 'soundboard_volume',
+			body: Number(volume)
+		}));
+	});
+
 	SAMMI.alert("Companion Ready")
 }
 
