@@ -57,6 +57,10 @@ SAMMI.extCommand('Companion: Get Memory', 3355443, 52, {
 	key: ['Memory Name', 14, 'myVar'],
 	scope: ['Scope (SHORT/LONG)', 14, 'SHORT']
 });
+SAMMI.extCommand('Companion: Delete Memory', 3355443, 52, {
+	key: ['Memory Name', 14, 'myVar'],
+	scope: ['Scope (SHORT/LONG)', 14, 'SHORT']
+});
 
 
 companion_main();

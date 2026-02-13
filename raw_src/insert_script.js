@@ -12,6 +12,9 @@ function companion_handleSongRecoPacket(data) {
 				comsole.error("SAMMI Failed to set track details variable")
 			})
 			break;
+		case 'songreco_lyric_compound':
+			SAMMI.setVariable('lyric_compound', data.body, 'companion-songreco')
+			break;
 		default:
 			console.error("Unknown songreco packet", data)
 			break;
@@ -268,6 +271,16 @@ function companion_main() {
 		ws.send(JSON.stringify({
 			version: 1,
 			type: 'memory_query',
+			body: { variable: key, scope }
+		}));
+	});
+
+	sammiclient.on('Companion: Delete Memory', (payload) => {
+		if (!ws || ws.readyState != ws.OPEN) return;
+		const { key, scope } = payload.Data;
+		ws.send(JSON.stringify({
+			version: 1,
+			type: 'memory_delete',
 			body: { variable: key, scope }
 		}));
 	});
